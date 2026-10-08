@@ -19,7 +19,7 @@ api/solicitudes.php
 .htaccess          (es el archivo cloudways.htaccess renombrado)
 ```
 
-Todo sale de `dist/` más `api/solicitudes.php` y `cloudways.htaccess`. No subir `router.php` (solo es para pruebas locales), `.env.example`, `referencias/` ni `.github/`.
+Todo sale de `dist/` más `api/solicitudes.php` y `cloudways.htaccess`; la rama `produccion` ya los trae armados. No subir `router.php` (solo es para pruebas locales), `.env.example`, `referencias/` ni `.github/`.
 
 ## Requisitos del hosting
 
@@ -63,22 +63,15 @@ No modificar `v2`, `mail`, MX ni TXT (correo y SPF). No crear registro comodín 
 3. `curl -X POST https://icqus.mx/api/solicitudes -H 'Content-Type: application/json' -d '{}'` responde `{"ok":false}` con código 400 (la ruta PHP está activa; un 404 indica que falta el `.htaccess`).
 4. Avisar a Grupo GAMI para hacer el registro de prueba: debe aparecer el contacto en Leviatán con la etiqueta `icqus-arhitac-2026`, la oportunidad en el pipeline «ICqUS · Evaluaciones empresariales» y el correo de confirmación.
 
-## Publicación automática (configurar una sola vez)
+## Publicación automática con Cloudways (Git deployment)
 
-Cada cambio en la rama `main` de este repositorio se sube solo al servidor con `.github/workflows/deploy.yml` (rsync por SSH). Después de la primera instalación no hay que copiar archivos a mano.
+Cada cambio en `main` genera automáticamente la rama **`produccion`**, que ya tiene el sitio listo en la raíz: `index.html`, `styles.css`, `app.js`, `assets/`, `api/solicitudes.php` y `.htaccess`. **Desplegar esa rama, no `main`.**
 
-Grupo GAMI genera una llave SSH y le envía al desarrollador **solo la llave pública** (`.pub`). El desarrollador:
+1. En Cloudways: Application → Deployment via GIT → generar la llave SSH y enviarla a Grupo GAMI. Se agrega al repositorio como *deploy key* de solo lectura.
+2. Repositorio: `git@github.com:YetiAC/icqus-landing.git` · Rama: `produccion` · Deployment path: `public_html`.
+3. Para que se publique solo: configurar el pull automático (webhook de GitHub hacia la API de Cloudways `POST /git/pull` o el método que use su cuenta). Si se deja manual, basta con «Pull» en Cloudways.
 
-1. Autoriza esa llave pública para el usuario SSH del sitio (en SiteGround: Site Tools → Devs → SSH Keys Manager → Import; en Cloudways: Application → Access Details → SSH/SFTP, o `~/.ssh/authorized_keys`).
-2. Le pasa a Grupo GAMI estos datos (no son secretos, pero no se publican):
-   - `DEPLOY_HOST`: servidor SSH (por ejemplo `ssh.icqus.mx` o la IP).
-   - `DEPLOY_PORT`: puerto SSH (SiteGround usa `18765`; Cloudways `22`).
-   - `DEPLOY_USER`: usuario SSH.
-   - `DEPLOY_PATH`: ruta absoluta de la carpeta pública (por ejemplo `/home/usuario/www/icqus.mx/public_html`).
-
-Grupo GAMI guarda esos datos y la llave privada como *secrets* del repositorio. Mientras no existan, el workflow no publica nada.
-
-La publicación no borra archivos del servidor: si se elimina un archivo de la landing, hay que borrarlo a mano. `icqus-config.php` vive fuera de la carpeta pública y nunca se toca.
+El webhook de Leviatán va en `icqus-config.php` fuera de `public_html` (por ejemplo `/home/master/applications/<app>/icqus-config.php`), así el despliegue nunca lo sobrescribe.
 
 ## Cambios
 

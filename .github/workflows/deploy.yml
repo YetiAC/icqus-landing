@@ -1,40 +1,42 @@
-name: Publicar landing en icqus.mx
+name: Preparar rama produccion
+# Cada cambio en main arma el sitio listo para el servidor en la rama `produccion`
+# (index.html, assets/, api/, .htaccess en la raíz). Cloudways despliega esa rama.
 on:
   push:
     branches: [main]
   workflow_dispatch:
+permissions:
+  contents: write
 concurrency:
-  group: deploy-servidor
+  group: produccion
   cancel-in-progress: false
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    env:
-      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     steps:
-      - name: Revisar configuración
-        if: env.DEPLOY_HOST == ''
-        run: echo "::notice::Falta configurar los secretos DEPLOY_*; no se publica en el servidor."
       - uses: actions/checkout@v4
-        if: env.DEPLOY_HOST != ''
       - name: Armar archivos del sitio
-        if: env.DEPLOY_HOST != ''
         run: |
           mkdir sitio
           cp -R dist/. sitio/
           cp -R api sitio/api
           cp cloudways.htaccess sitio/.htaccess
-      - name: Subir por SSH
-        if: env.DEPLOY_HOST != ''
-        env:
-          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      - name: Publicar en la rama produccion
+        # Conserva el historial (sin force push) para que Cloudways pueda hacer git pull.
         run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p "${DEPLOY_PORT:-22}" "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          # Sin --delete: no borra archivos del servidor (certificados, icqus-config.php, etc.).
-          rsync -rlvz --checksum -e "ssh -i ~/.ssh/deploy_key -p ${DEPLOY_PORT:-22}" sitio/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+          SHA=$(git rev-parse --short HEAD)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code origin produccion >/dev/null; then
+            git fetch -q origin produccion
+            git worktree add -q prod origin/produccion
+            git -C prod checkout -q -B produccion
+          else
+            git worktree add -q --orphan -b produccion prod
+          fi
+          find prod -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -R sitio/. prod/
+          git -C prod add -A
+          if git -C prod diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git -C prod commit -q -m "Sitio generado desde main@$SHA"
+          git -C prod push -q origin produccion
