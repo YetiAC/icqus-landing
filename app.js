@@ -36,15 +36,17 @@ const demo=window.ICQUS_DEMO;
 if(demo&&demo.url){
   try{
     const url=new URL(demo.url,location.href);
-    if(url.protocol!=='https:')throw new Error('Invalid demo URL');
+    if(url.protocol!=='https:'&&url.origin!==location.origin)throw new Error('Invalid demo URL');
     const stage=document.querySelector('#demo-stage');
     const supportedEmbed=['www.youtube.com','www.youtube-nocookie.com','player.vimeo.com','drive.google.com'].includes(url.hostname);
     let media;
     if(url.pathname.toLowerCase().endsWith('.mp4')){
-      media=document.createElement('video');media.controls=true;media.preload='metadata';media.playsInline=true;media.src=url.href;media.setAttribute('aria-label',demo.title);media.poster='assets/enterprise-dashboard-branded.png';
+      media=document.createElement('video');media.muted=true;media.loop=true;media.playsInline=true;media.preload='metadata';media.src=url.href;media.setAttribute('aria-label',demo.title);media.poster=demo.poster||'assets/enterprise-dashboard-branded.png';media.classList.add('demo-video');
+      // Loop silencioso: se reproduce solo, salvo si el visitante pidió reducir el movimiento.
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches)media.controls=true;else media.autoplay=true;
     }else if(supportedEmbed){
       media=document.createElement('iframe');media.src=url.href;media.title=demo.title;media.loading='lazy';media.allow='encrypted-media; fullscreen; picture-in-picture';media.allowFullscreen=true;media.referrerPolicy='strict-origin-when-cross-origin';
     }else throw new Error('Unsupported demo host');
-    media.className='demo-player';stage.replaceChildren(media);
+    media.classList.add('demo-player');stage.replaceChildren(media);
   }catch(error){ /* Preserve the readable demonstration invitation if configuration is invalid. */ }
 }
