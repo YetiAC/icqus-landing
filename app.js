@@ -48,5 +48,17 @@ if(demo&&demo.url){
       media=document.createElement('iframe');media.src=url.href;media.title=demo.title;media.loading='lazy';media.allow='encrypted-media; fullscreen; picture-in-picture';media.allowFullscreen=true;media.referrerPolicy='strict-origin-when-cross-origin';
     }else throw new Error('Unsupported demo host');
     media.classList.add('demo-player');stage.replaceChildren(media);
+    if(demo.sound&&media.tagName==='VIDEO'){
+      const icon='<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/>';
+      const on=icon+'<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Escuchar con voz</span>';
+      const off=icon+'<path d="m22 9-6 6M16 9l6 6"/></svg><span>Silenciar</span>';
+      const sound=document.createElement('button');sound.type='button';sound.className='demo-sound';sound.innerHTML=on;sound.setAttribute('aria-pressed','false');
+      sound.addEventListener('click',()=>{
+        media.muted=!media.muted;
+        if(!media.muted){media.currentTime=0;media.play().catch(()=>{});}
+        sound.innerHTML=media.muted?on:off;sound.setAttribute('aria-pressed',String(!media.muted));
+      });
+      stage.append(sound);
+    }
   }catch(error){ /* Preserve the readable demonstration invitation if configuration is invalid. */ }
 }
