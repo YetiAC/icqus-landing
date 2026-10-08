@@ -1,0 +1,40 @@
+name: Publicar landing en icqus.mx
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: deploy-servidor
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+    steps:
+      - name: Revisar configuración
+        if: env.DEPLOY_HOST == ''
+        run: echo "::notice::Falta configurar los secretos DEPLOY_*; no se publica en el servidor."
+      - uses: actions/checkout@v4
+        if: env.DEPLOY_HOST != ''
+      - name: Armar archivos del sitio
+        if: env.DEPLOY_HOST != ''
+        run: |
+          mkdir sitio
+          cp -R dist/. sitio/
+          cp -R api sitio/api
+          cp cloudways.htaccess sitio/.htaccess
+      - name: Subir por SSH
+        if: env.DEPLOY_HOST != ''
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${DEPLOY_PORT:-22}" "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # Sin --delete: no borra archivos del servidor (certificados, icqus-config.php, etc.).
+          rsync -rlvz --checksum -e "ssh -i ~/.ssh/deploy_key -p ${DEPLOY_PORT:-22}" sitio/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"

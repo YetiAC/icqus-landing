@@ -63,6 +63,23 @@ No modificar `v2`, `mail`, MX ni TXT (correo y SPF). No crear registro comodín 
 3. `curl -X POST https://icqus.mx/api/solicitudes -H 'Content-Type: application/json' -d '{}'` responde `{"ok":false}` con código 400 (la ruta PHP está activa; un 404 indica que falta el `.htaccess`).
 4. Avisar a Grupo GAMI para hacer el registro de prueba: debe aparecer el contacto en Leviatán con la etiqueta `icqus-arhitac-2026`, la oportunidad en el pipeline «ICqUS · Evaluaciones empresariales» y el correo de confirmación.
 
+## Publicación automática (configurar una sola vez)
+
+Cada cambio en la rama `main` de este repositorio se sube solo al servidor con `.github/workflows/deploy.yml` (rsync por SSH). Después de la primera instalación no hay que copiar archivos a mano.
+
+Grupo GAMI genera una llave SSH y le envía al desarrollador **solo la llave pública** (`.pub`). El desarrollador:
+
+1. Autoriza esa llave pública para el usuario SSH del sitio (en SiteGround: Site Tools → Devs → SSH Keys Manager → Import; en Cloudways: Application → Access Details → SSH/SFTP, o `~/.ssh/authorized_keys`).
+2. Le pasa a Grupo GAMI estos datos (no son secretos, pero no se publican):
+   - `DEPLOY_HOST`: servidor SSH (por ejemplo `ssh.icqus.mx` o la IP).
+   - `DEPLOY_PORT`: puerto SSH (SiteGround usa `18765`; Cloudways `22`).
+   - `DEPLOY_USER`: usuario SSH.
+   - `DEPLOY_PATH`: ruta absoluta de la carpeta pública (por ejemplo `/home/usuario/www/icqus.mx/public_html`).
+
+Grupo GAMI guarda esos datos y la llave privada como *secrets* del repositorio. Mientras no existan, el workflow no publica nada.
+
+La publicación no borra archivos del servidor: si se elimina un archivo de la landing, hay que borrarlo a mano. `icqus-config.php` vive fuera de la carpeta pública y nunca se toca.
+
 ## Cambios
 
-Para cambios en la landing, abrir un pull request en este repositorio o enviar los archivos a Grupo GAMI.
+Los cambios los hace Grupo GAMI en este repositorio y se publican solos. Si el desarrollador necesita proponer uno, puede abrir un pull request.
