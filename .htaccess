@@ -1,4 +1,6 @@
 Options -Indexes
+# La landing es index.html; evita que el index.php de ejemplo de Cloudways tome la raíz.
+DirectoryIndex index.html index.php
 RewriteEngine On
 RewriteRule ^api/solicitudes/?$ api/solicitudes.php [L]
 <FilesMatch "^\.">
