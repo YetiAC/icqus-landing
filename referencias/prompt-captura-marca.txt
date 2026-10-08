@@ -1,0 +1,16 @@
+Edición realizada con la herramienta integrada image_gen en modo edición de imagen.
+Entradas: dist/assets/enterprise-dashboard.png, dist/assets/icqus-logo.png, dist/assets/event-background.png.
+Resultado: dist/assets/enterprise-dashboard-branded.png (1611 × 976).
+Se conserva el original en dist/assets/enterprise-dashboard.png.
+Revisión visual: los nueve elementos del menú, cuatro indicadores (1,259, 320, 8, 94%), los doce meses y las seis etiquetas del eje vertical permanecen legibles.
+
+Prompt exacto:
+Use case: precise-object-edit.
+Asset type: existing software screenshot used in the ICqUS landing page.
+Input images: Image 1 is the ONLY edit target, a 1608 x 974 laptop screenshot of the Dashboard empresarial. Image 2 is the official ICqUS logo, a supporting insert. Image 3 is a palette reference only.
+Primary request: recolor the software interface to harmonize with the proposed ICqUS event landing, and replace the generic ICQUS wordmark at upper left with the exact official logo from image 2. Preserve ALL existing content and layout. This is a strict visual edit, not a redesign of functionality or information.
+Palette: charcoal #353535 text, white #FFFFFF and silver #ECECEC backgrounds, wine #64252F as primary accent for selected navigation and the line chart, terracotta #983B21 for a secondary metric icon, sage #98B2A3 and forest #344633 for green semantic accents. Keep green Coverage positive status green. Remove the mismatched bright blue and violet accents. Use very subtle pale wine and pale sage backgrounds for icon circles and selected navigation.
+Invariants: Preserve the laptop's exact silhouette, border, crop, relative proportions and all element positions. Preserve all typography wording, Spanish accents, numeric values, chart point coordinates, line shape, area under graph, axis labels, gridlines, icons, shadows and spacing. Keep the light interface and high contrast readability. No ribbons or event decoration inside the software. Preserve the image aspect ratio at 1608:974 and transparent area outside the laptop.
+Exact visible text to preserve: "Dashboard empresarial"; sidebar "Resumen", "Pacientes", "Consultas", "Campañas", "Facturación", "Reportes", "Documentos", "Configuración", "Usuarios"; metric labels "Empleados", "Consultas", "Campañas", "Cobertura"; metric values "1,259", "320", "8", "94%"; graph title "Consultas por mes"; y axis "1000", "800", "600", "400", "200", "0"; x axis "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic".
+Logo change: replace the current plain ICQUS/Health System Software logo at upper left with the official image 2 ICqUS fish-symbol logo, including its official "HEALTH SYSTEMS SOFTWARE" tagline and small MR. Insert the logo as supplied with its original charcoal color, proportions and design; never typeset an imitation.
+Avoid: omitted text, rewritten labels, changed values, moved or added chart points, simplified layout, duplicated controls, fake new features, new badges, distorted official logo, unreadable small letters. Change only the colors and official logo. Output one edited image.

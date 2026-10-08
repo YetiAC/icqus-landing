@@ -1,0 +1,22 @@
+BUILT-IN IMAGE_GEN MODE — one generation request per asset, no retries.
+
+ASSET 1: icqus-hero-v2.png
+Use case: ads-marketing
+Asset type: clean standalone panoramic web hero background for ICqUS, premium tech-medical campaign.
+Primary request: Create one NEW original image inspired by the visual language of the two supplied ARHITAC booth reference designs. These are style references only; do not reproduce their layouts, typography, logos or panels. Wide landscape panorama, approximately 2.4:1 aspect ratio, high-quality polished final artwork.
+Scene/backdrop: deep charcoal-black field (#353535), with the center and left middle very dark and exceptionally quiet negative space for a separate readable web headline.
+Style/medium: sophisticated cinematic abstract 3D satin ribbon composition with refined technical detail.
+Composition/framing: elegant flowing satin ribbons trace the upper/right and lower edges, loosely framing a generous open left/center. Wine (#64252F), terracotta (#983B21), sage (#98B2A3), deep green (#344633), silver-white accents. Fine data pathways and a few subtle glowing connection nodes follow the ribbons near the edges. Sparse microdot texture fades into the dark background; leave the central headline zone almost texture-free.
+Lighting/mood: controlled metallic highlights, dimensional satin, understated glow, premium and elegant workplace-health technology identity matching the references.
+Constraints: background asset only, edge-to-edge full image. No text of any kind, no letters, no logo, no QR code, no screenshots, no UI panels, no cards, no charts, no people, no watermark. Do not include the reference screenshots or any booth artifact.
+
+ASSET 2: icqus-clinic-v2.png
+Use case: photorealistic-natural
+Asset type: supporting cinematic editorial photograph for an occupational-health technology landing page, illustrative marketing imagery.
+Primary request: one high-quality landscape photograph approximately 3:2 aspect ratio showing a Latin American woman occupational-health medical professional in a clean white coat discussing a tablet with a Latino industrial employee wearing a clean navy work uniform.
+Scene/backdrop: real-looking bright, organized workplace clinic with restrained wine and forest-green accents; natural daylight from a window, credible tidy clinical furnishings and discreet industrial workplace context.
+Subject: doctor and employee in respectful, calm focused conversation about health information. The doctor holds the tablet at a comfortable angle and indicates something on it as the employee listens attentively. Natural side-angle candid framing, waist-up medium scene, believable relaxed posture and hands.
+Style/medium: cinematic editorial photography, lifelike natural skin texture, nuanced authentic Latin American faces, realistic clothing and anatomy, gentle depth of field.
+Lighting/mood: soft natural daylight, quiet professional atmosphere, grounded human warmth.
+Constraints: this is an illustrative marketing scene, not a representation of actual Grupo GAMI staff. No posed handshake, no logos or branding, no visible patient details, no legible tablet screen data or text, no watermarks, no synthetic-looking skin. Keep the tablet screen oblique and indistinct. Clean contemporary workplace-health and health-data context.
+

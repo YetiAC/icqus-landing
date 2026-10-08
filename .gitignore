@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+entrega-cloudways/
+*.tar.gz
+*.zip
+qa/
+.DS_Store
