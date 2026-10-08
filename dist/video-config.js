@@ -1,3 +1,3 @@
 'use strict';
-// Temporary ICqUS presentation supplied by Grupo GAMI; replace this URL when the final demo is ready.
-window.ICQUS_DEMO={url:'https://www.youtube-nocookie.com/embed/BJmliuag3j8?rel=0',title:'ICqUS · Video de Grupo GAMI'};
+// Video loop del stand ARHITAC 2026 (video-stand/salida), versión web 1600×676 sin audio.
+window.ICQUS_DEMO={url:'assets/video/icqus-demo.mp4',poster:'assets/video/icqus-demo-poster.jpg',title:'ICqUS · De una consulta a una decisión'};
