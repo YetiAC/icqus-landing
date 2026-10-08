@@ -25,3 +25,4 @@
 .button-ghost{background:transparent;color:var(--wine);border-color:#c9b2b8}.button-ghost:hover{background:#f6eef0;color:var(--wine)}.nav nav .button-ghost{margin-right:-18px}@media(max-width:1100px){.login-extra{display:none}}@media(max-width:760px){.nav nav{gap:8px}.nav nav .button-ghost{margin-right:0}}
 .nav nav .button{white-space:nowrap}@media(max-width:420px){.nav nav .button:not(.button-ghost){display:none}}
 .demo-player.demo-video{aspect-ratio:2560/1080;object-fit:cover}
+.demo-stage{position:relative}.demo-sound{position:absolute;left:16px;bottom:16px;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #ffffff40;border-radius:999px;background:#191d1bcc;color:#fff;font-weight:600;font-size:.875rem;backdrop-filter:blur(6px);transition:background .2s}.demo-sound:hover{background:#64252fe6}@media(max-width:760px){.demo-sound{left:10px;bottom:10px;padding:7px 12px;font-size:.75rem}}
