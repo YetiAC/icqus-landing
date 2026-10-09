@@ -19,9 +19,12 @@ foreach (['interest'=>1000,'utm_source'=>120,'utm_medium'=>120,'utm_campaign'=>1
   if (isset($input[$key]) && (!is_string($input[$key]) || strlen($input[$key]) > $limit * 4)) respond(422, ['ok'=>false]);
 }
 $webhook = getenv('LEVIATAN_WEBHOOK_URL') ?: ($_SERVER['LEVIATAN_WEBHOOK_URL'] ?? '');
-// Alternativa sin variables de entorno: archivo fuera de la carpeta pública que devuelve ['LEVIATAN_WEBHOOK_URL' => 'https://...'].
-$configFile = dirname(__DIR__, 2) . '/icqus-config.php';
-if (!$webhook && is_file($configFile)) { $config = include $configFile; $webhook = is_array($config) ? ($config['LEVIATAN_WEBHOOK_URL'] ?? '') : ''; }
+// Alternativa sin variables de entorno: archivo que devuelve ['LEVIATAN_WEBHOOK_URL' => 'https://...'].
+// Se busca fuera de la carpeta pública, en private_html (Cloudways) o como archivo oculto en la raíz pública (bloqueado por .htaccess).
+foreach ([dirname(__DIR__, 2) . '/icqus-config.php', dirname(__DIR__, 2) . '/private_html/icqus-config.php', dirname(__DIR__) . '/.icqus-config.php'] as $configFile) {
+  if ($webhook) break;
+  if (is_file($configFile)) { $config = include $configFile; $webhook = is_array($config) ? ($config['LEVIATAN_WEBHOOK_URL'] ?? '') : ''; }
+}
 if (!$webhook || !filter_var($webhook, FILTER_VALIDATE_URL) || parse_url($webhook, PHP_URL_SCHEME) !== 'https') respond(503, ['ok'=>false, 'code'=>'integration_unavailable']);
 $payload = [];
 foreach (array_merge(array_keys($required), ['interest','utm_source','utm_medium','utm_campaign','utm_content','landing_path']) as $key) $payload[$key] = trim($input[$key] ?? '');
