@@ -71,7 +71,13 @@ Cada cambio en `main` genera automáticamente la rama **`produccion`**, que ya t
 2. Repositorio: `git@github.com:YetiAC/icqus-landing.git` · Rama: `produccion` · Deployment path: `public_html`.
 3. Para que se publique solo: configurar el pull automático (webhook de GitHub hacia la API de Cloudways `POST /git/pull` o el método que use su cuenta). Si se deja manual, basta con «Pull» en Cloudways.
 
-El webhook de Leviatán va en `icqus-config.php` fuera de `public_html` (por ejemplo `/home/master/applications/<app>/icqus-config.php`), así el despliegue nunca lo sobrescribe.
+El webhook de Leviatán va en un archivo de configuración que el despliegue nunca sobrescribe. `api/solicitudes.php` lo busca en este orden (basta uno):
+
+1. `icqus-config.php` un nivel arriba de `public_html`;
+2. `private_html/icqus-config.php`;
+3. `public_html/.icqus-config.php` (con punto; el `.htaccess` lo bloquea y responde 403).
+
+Después de cada «Pull», si la página no cambia, es la caché de Varnish: purgarla o dejarla desactivada para esta app. El HTML ya se envía con `Cache-Control: no-cache`.
 
 ## Cambios
 
